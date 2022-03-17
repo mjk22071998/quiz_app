@@ -29,7 +29,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  PageController _pageController = PageController(initialPage: 0);
+  final PageController _pageController = PageController(initialPage: 0);
   bool isPressed = false;
   Color byDefault = Colors.green;
   Color right = Colors.blue;
@@ -50,6 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 isPressed = false;
               },
               controller: _pageController,
+              physics: const NeverScrollableScrollPhysics(),
               itemBuilder: (context, index) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -106,13 +107,34 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     TextButton(
                         onPressed: isPressed
-                            ? () {
-                                _pageController.nextPage(
-                                    duration: const Duration(milliseconds: 250),
-                                    curve: Curves.linear);
-                              }
+                            ? (index + 1 == questionsList.length)
+                                ? () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: const Text("Results"),
+                                            content: Text("Your score is $score"),
+                                            actions: [
+                                              TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: const Text("OK"))
+                                            ],
+                                          );
+                                        });
+                                  }
+                                : () {
+                                    _pageController.nextPage(
+                                        duration:
+                                            const Duration(milliseconds: 250),
+                                        curve: Curves.linear);
+                                  }
                             : () {},
-                        child: const Text("Next Question"))
+                        child: Text((index + 1 == questionsList.length)
+                            ? "See Result"
+                            : "Next Question"))
                   ],
                 );
               },
