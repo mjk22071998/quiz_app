@@ -29,6 +29,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  PageController _pageController = PageController(initialPage: 0);
+  bool isPressed = false;
+  Color byDefault = Colors.green;
+  Color right = Colors.blue;
+  Color wrong = Colors.red;
+  int score = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +46,10 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Padding(
             padding: const EdgeInsets.all(10),
             child: PageView.builder(
+              onPageChanged: (value) {
+                isPressed = false;
+              },
+              controller: _pageController,
               itemBuilder: (context, index) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -67,12 +78,41 @@ class _MyHomePageState extends State<MyHomePage> {
                         i < questionsList[index].answers.length;
                         i++)
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: isPressed
+                            ? () {}
+                            : () {
+                                setState(() {
+                                  isPressed = true;
+                                  if (questionsList[index]
+                                      .answers
+                                      .values
+                                      .toList()[i]) {
+                                    score += 10;
+                                  }
+                                });
+                              },
+                        style: ElevatedButton.styleFrom(
+                            primary: isPressed
+                                ? questionsList[index]
+                                        .answers
+                                        .values
+                                        .toList()[i]
+                                    ? right
+                                    : wrong
+                                : byDefault),
                         child: Text(
                           questionsList[index].answers.entries.toList()[i].key,
                         ),
                       ),
-                    TextButton(onPressed: (){} ,child: const  Text("Next Question"))
+                    TextButton(
+                        onPressed: isPressed
+                            ? () {
+                                _pageController.nextPage(
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.linear);
+                              }
+                            : () {},
+                        child: const Text("Next Question"))
                   ],
                 );
               },
