@@ -42,10 +42,11 @@ class _MyHomePageState extends State<MyHomePage> {
               itemBuilder: (context, index) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
                       "Question: ${index + 1}/${questionsList.length}",
+                      textAlign: TextAlign.center,
                       style: const TextStyle(
                           fontSize: 28, fontWeight: FontWeight.bold),
                     ),
@@ -66,14 +67,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         i < questionsList[index].answers.length;
                         i++)
                       ElevatedButton(
-                          onPressed: () {},
-                          child: Text(
-                            questionsList[index]
-                                .answers
-                                .entries
-                                .toList()[i]
-                                .key,
-                          ))
+                        onPressed: () {},
+                        child: Text(
+                          questionsList[index].answers.entries.toList()[i].key,
+                        ),
+                      ),
+                    TextButton(onPressed: (){} ,child: const  Text("Next Question"))
                   ],
                 );
               },
