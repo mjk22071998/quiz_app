@@ -47,7 +47,9 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: const EdgeInsets.all(10),
             child: PageView.builder(
               onPageChanged: (value) {
-                isPressed = false;
+                setState(() {
+                  isPressed = false;
+                });
               },
               controller: _pageController,
               physics: const NeverScrollableScrollPhysics(),
